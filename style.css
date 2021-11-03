@@ -1,0 +1,82 @@
+textarea {
+   resize: none;
+}
+
+#headerDiv {
+  position: relative;
+}
+
+#details {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: yellow;
+  border: 2px solid #c78b00;
+  position: absolute;
+  top: 0;
+  left: 75px;
+}
+
+#detailsChar {
+  position: absolute;
+  top: -110%;
+  left: 20%;
+  pointer-events: none;
+}
+
+#detailsText {
+  background: yellow;
+  border: 3px solid #c78b00;
+  position: absolute;
+  top: 0;
+  left: 100px;
+  visibility: hidden;
+}
+
+#detailsText.show {
+  visibility: visible;
+}
+
+#kInput {
+  margin-left: 50px;
+  margin-right: 50px;
+  width: 100px;
+}
+
+#batchK {
+  width: 100px;
+}
+
+
+.hidden {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.modalContainer {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0px;
+  left: 0px;
+  z-index: 1000000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.modalContainer.show {
+  display: flex;
+  position: absolute;
+}
+
+.modal {
+  background: white;
+  width: 20%;
+  min-width: 200px;
+  padding: 40px;
+  border: 10px solid rgba(50, 50, 50, 1);
+}

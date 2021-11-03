@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>KNN</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
+    <input type="file" id="dataSet"/>
+    <br><br>
+    <div id="headerDiv">
+      <input type="checkbox" id="header"/>
+      <label for="header">header</label>
+      <div id="details"><h2 id="detailsChar">?</h2></div>
+      <div id="detailsText">&nbsp;Should be checked if the first row in the dataset&nbsp;<br>&nbsp;is a header specifying the name of each attribute&nbsp;</div>
+    </div>
+    <br><br>
+    <button id="load">Load</button>
+    <br><br>
+    <button id="rows">Manage rows</button>
+    <br><br>
+    <button id="learn">Learn!</button>
+    <button id="openTest">Test the dataset</button>
+    <br><br>
+
+    <div class="modalContainer" id="rowsModal">
+      <div class="modal" id="activeArea">
+        <center>
+          Current rows:
+        </center>
+      </div>
+    </div>
+
+    <div class="modalContainer" id="batchModal">
+      <div class="modal" id="activeBatchArea">
+        <center>
+          Load a CSV file containing the samples you want to classify
+        </center>
+        <input type="file" id="batch"/>
+        <br><br>
+        <input type="checkbox" id="headerBatch"/>
+        <label for="header">header</label>
+        <label for="batchK">&nbsp &nbsp &nbsp &nbsp K:</label>
+        <textarea id="batchK"></textarea>
+        <br><br>
+        <button id="loadBatch">Load</button>
+        <button id="batchRowsButton">Manage rows</button>
+        <button id="classifyBatch">Classify</button>
+      </div>
+    </div>
+
+    <div class="modalContainer" id="testModal">
+      <div class="modal" id="activeBatchArea">
+        <center>
+          The specified number of random samples from your dataset will be used to train the model.
+          All the other samples will be classified by this model to test its accuracy.
+          <br>
+          Note that, the samples being chosen randomly, different tests may result in different accuracies.
+        </center>
+        <label for="trainingNumber">Number of samples to train:</label>
+        <textarea id="trainingNumber"></textarea>
+        <br>
+        <label for="testK">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp K: </label>
+        <textarea id="testK"></textarea>
+        <br><br>
+        <button id="runTest">Run test</button>
+        <p id="testResult">
+      </div>
+    </div>
+
+    <div class="modalContainer" id="batchRows">
+      <div class="modal" id="activeBatchRows">
+        <center>
+          Current rows:
+        </center>
+      </div>
+    </div>
+
+    <script src="./convertData.js"></script>
+    <script src="./knn.js"></script>
+    <script src="./interface.js"></script>
+  </body>
+
+</html>
