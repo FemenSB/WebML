@@ -23,6 +23,7 @@ const batchRows = document.getElementById('batchRows');
 const activeBatchRows = document.getElementById('activeBatchRows');
 const batchRowsButton = document.getElementById('batchRowsButton');
 const testResult = document.getElementById('testResult');
+const selectAlgorithm = document.getElementById('selectAlgorithm');
 
 var downloader = document.createElement('a'); // Used to download files in case of batch classification
 downloader.classList.add('hidden');
@@ -35,9 +36,18 @@ var target; // Target value. If not defined by the user, is going to be the last
 var inputDiv; // Div that will contain the input elements for classification
 var inputElements = []; // Array storing pointers to the input elements for classification
 
+// Instantiate algorithm objects
+algorithms = [new Algorithm('K nearest neighbours', knnLearn, knnClassify, numericalSet, numericalSetBatch)];
+
+// Add every algorithm to the selector options
+for(let i = 0; i < algorithms.length; i++) {
+  let newOption = document.createElement('option');
+  newOption.value = i;
+  newOption.innerHTML = algorithms[i].name;
+  selectAlgorithm.appendChild(newOption);
+}
+
 function removeRow(matrix, index) {
-  console.log('aqui o  bozao');
-  console.log(matrix);
   for(let i = 0; i < matrix.length; i++) {
     matrix[i].splice(index, 1);
   }
@@ -96,7 +106,7 @@ classifyBatchButton.addEventListener('click', (e) => {
   var newTable = numericalSetBatch(batchTable);
 
   for(let i = 0 + headerBatch.checked; i < newTable.length; i++) {
-    newTable[i].push(knnClassify(newTable[i], parseInt(batchK.value)));
+    newTable[i].push(algorithms[selectAlgorithm.value].classify(newTable[i], parseInt(batchK.value)));
   }
 
   let csvContent = "data:text/csv;charset=utf-8,";
@@ -263,7 +273,7 @@ batchRows.addEventListener('click', (e) => { // Event to close the row managemen
 });
 
 learnButton.addEventListener('click', (e) => {
-  knnLearn(); // Create the model
+  algorithms[selectAlgorithm.value].learn(); // Create the model
 
   // Handling the rendering of the input interface
   if(inputDiv != undefined) inputDiv.remove(); // If there is already a inputDiv, remove it
@@ -291,7 +301,7 @@ learnButton.addEventListener('click', (e) => {
   inputDiv.appendChild(document.createElement('br'));
   inputElements = []; // Reset array to discard old elements
 
-  for(let i = 0; i < trainedSet[0].length - 1; i++) { // Create text areas to get the input
+  for(let i = 0; i < table[0].length - 1; i++) { // Create text areas to get the input
     inputElements.push(document.createElement('textarea'));
     inputDiv.appendChild(inputElements[i]);
 
@@ -317,7 +327,7 @@ learnButton.addEventListener('click', (e) => {
       inputSample.push(parseFloat(inputElements[i].value));
     }
     if(classificationText != undefined) classificationText.remove();
-    classificationText = document.createTextNode(knnClassify(inputSample, parseInt(kInput.value)));
+    classificationText = document.createTextNode(algorithms[selectAlgorithm.value].classify(inputSample, parseInt(kInput.value)));
     inputDiv.appendChild(classificationText);
   });
   inputDiv.appendChild(classifyButton);
@@ -345,6 +355,7 @@ runTest.addEventListener('click', (e) => {
     if(Math.random() <= choiceProb) {
       trainingSet.push(table[i]);
       table.splice(i, 1);
+      i = i * (i < table.length) // If the removed sample was the last, return to zero
     } else {
       i = (i + 1) % table.length;
     }
@@ -353,7 +364,7 @@ runTest.addEventListener('click', (e) => {
   console.log(trainingSet);
   table = trainingSet;
   console.log(table);
-  knnLearn(); // Train the model
+  algorithms[selectAlgorithm.value].learn(); // Train the model
 
   var correct = 0; // Number of correct classifications
   for(i = 0; i < testingSet.length; i++) { // Classify the samples in testingSet
@@ -363,7 +374,7 @@ runTest.addEventListener('click', (e) => {
     for(let j = 0; j < testingSet[i].length; j++) {
       sampleTest[j] = parseFloat(sampleTest[j]);
     }
-    if(knnClassify(sampleTest, parseInt(testK.value)) === sampleClass) {
+    if(algorithms[selectAlgorithm.value].classify(sampleTest, parseInt(testK.value)) === sampleClass) {
       correct++;
     }
   }

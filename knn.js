@@ -1,16 +1,14 @@
-var trainedSet;
-
 // For the KNN, the training stage will be just format the given dataset
-function knnLearn() {trainedSet = numericalSet(table);}
+function knnLearn() {this.model = numericalSet(table);}
 
 function knnClassify(sample, k) { // Receive a sample and return its classification based on the k nearest neighbours
   let distances = [];
   let distanceAux;
-  for(let i = 0; i < trainedSet.length; i++) { // For every sample in the dataset
+  for(let i = 0; i < this.model.length; i++) { // For every sample in the dataset
     distanceAux = 0;
-    for(let j = 0; j < trainedSet[0].length - 1; j++) {
+    for(let j = 0; j < this.model[0].length - 1; j++) {
       // Calculate the euclidian distance between the sample to be classified and the sample from the dataset
-      distanceAux += (sample[j] - trainedSet[i][j]) * (sample[j] - trainedSet[i][j]);
+      distanceAux += (sample[j] - this.model[i][j]) * (sample[j] - this.model[i][j]);
     }
     distances.push(Math.sqrt(distanceAux));
   }
@@ -35,9 +33,9 @@ function knnClassify(sample, k) { // Receive a sample and return its classificat
   let ocurrencies = []; // ocurrencies[i] will store the number of ocurrencies of the classification labels[i]
   let foundIndex; // Auxiliary variable
   for(let i = 0; i < k; i++) {
-    foundIndex = labels.indexOf(trainedSet[nearest[i][1]][trainedSet[0].length - 1]);
+    foundIndex = labels.indexOf(this.model[nearest[i][1]][this.model[0].length - 1]);
     if(foundIndex == -1) { // If the classification isn't already in the labels array
-      labels.push(trainedSet[nearest[i][1]][trainedSet[0].length - 1]); // Add it to labels[]
+      labels.push(this.model[nearest[i][1]][this.model[0].length - 1]); // Add it to labels[]
       ocurrencies.push(1); // Set its current ocurrence to 1
     } else { // If the classification is already in labels[]
       ocurrencies[foundIndex]++; // Increment its ocurrencies

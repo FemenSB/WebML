@@ -1,5 +1,6 @@
 function numericalSet(rawSet) { // Return a formatted version of the dataset based on the user settings
   let newSet = [];
+  console.log(rawSet);
 
   for(let i = 0; i < rawSet.length; i++) { // Store in newSet the values converted to float
     let j;
