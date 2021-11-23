@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>KNN</title>
+    <title>WebML</title>
     <link rel="stylesheet" href="./style.css">
   </head>
 
@@ -42,8 +42,6 @@
         <br><br>
         <input type="checkbox" id="headerBatch"/>
         <label for="header">header</label>
-        <label for="batchK">&nbsp &nbsp &nbsp &nbsp K:</label>
-        <textarea id="batchK"></textarea>
         <br><br>
         <button id="loadBatch">Load</button>
         <button id="batchRowsButton">Manage rows</button>
@@ -62,8 +60,6 @@
         <label for="trainingNumber">Number of samples to train:</label>
         <textarea id="trainingNumber"></textarea>
         <br>
-        <label for="testK">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp K: </label>
-        <textarea id="testK"></textarea>
         <br><br>
         <button id="runTest">Run test</button>
         <p id="testResult">
@@ -80,6 +76,7 @@
 
     <script src="./convertData.js"></script>
     <script src="./knn.js"></script>
+    <script src="./decisionTree.js"></script>
     <script src="./algorithmClasses.js"></script>
     <script src="./interface.js"></script>
   </body>

@@ -13,12 +13,12 @@ const inputBatch = document.getElementById('batch');
 const headerBatch = document.getElementById('headerBatch');
 const loadBatch = document.getElementById('loadBatch');
 const classifyBatchButton = document.getElementById('classifyBatch');
-const batchK = document.getElementById('batchK');
+//const batchK = document.getElementById('batchK');
 const testModal = document.getElementById('testModal');
 const trainingNumber = document.getElementById('trainingNumber');
 const runTest = document.getElementById('runTest');
 const openTest = document.getElementById('openTest');
-const testK = document.getElementById('testK');
+//const testK = document.getElementById('testK');
 const batchRows = document.getElementById('batchRows');
 const activeBatchRows = document.getElementById('activeBatchRows');
 const batchRowsButton = document.getElementById('batchRowsButton');
@@ -35,9 +35,11 @@ var batchTable = []; // Matrix to store the samples batch to be classified
 var target; // Target value. If not defined by the user, is going to be the last row by default
 var inputDiv; // Div that will contain the input elements for classification
 var inputElements = []; // Array storing pointers to the input elements for classification
+var currentInterface; // Object containing interface objects specific to the currently selected algorithm
 
 // Instantiate algorithm objects
-algorithms = [new Algorithm('K nearest neighbours', knnLearn, knnClassify, numericalSet, numericalSetBatch)];
+algorithms = [new Algorithm('K nearest neighbours', knnLearn, knnCall, numericalSet, numericalSetBatch, knnInterface),
+              new Algorithm('Decision tree', dtLearn, dtClassify, numericalSet, numericalSetBatch, dtInterface)];
 
 // Add every algorithm to the selector options
 for(let i = 0; i < algorithms.length; i++) {
@@ -46,6 +48,15 @@ for(let i = 0; i < algorithms.length; i++) {
   newOption.innerHTML = algorithms[i].name;
   selectAlgorithm.appendChild(newOption);
 }
+
+currentInterface = algorithms[selectAlgorithm.value].generateInterface(); // Initialize the algorithm specific interface
+document.body.appendChild(currentInterface.div);
+
+selectAlgorithm.addEventListener('change', (e) => {
+  currentInterface.div.remove();
+  currentInterface = algorithms[selectAlgorithm.value].generateInterface();
+  document.body.appendChild(currentInterface.div);
+});
 
 function removeRow(matrix, index) {
   for(let i = 0; i < matrix.length; i++) {
@@ -106,7 +117,7 @@ classifyBatchButton.addEventListener('click', (e) => {
   var newTable = numericalSetBatch(batchTable);
 
   for(let i = 0 + headerBatch.checked; i < newTable.length; i++) {
-    newTable[i].push(algorithms[selectAlgorithm.value].classify(newTable[i], parseInt(batchK.value)));
+    newTable[i].push(algorithms[selectAlgorithm.value].classify(newTable[i]));
   }
 
   let csvContent = "data:text/csv;charset=utf-8,";
@@ -314,10 +325,10 @@ learnButton.addEventListener('click', (e) => {
     inputDiv.appendChild(document.createElement('br'));
   }
 
-  inputDiv.appendChild(document.createTextNode('K:'));
+  /*inputDiv.appendChild(document.createTextNode('K:'));
   var kInput = document.createElement('textarea');
   kInput.id = 'kInput';
-  inputDiv.appendChild(kInput);
+  inputDiv.appendChild(kInput);*/
   var classifyButton = document.createElement('button');
   classifyButton.textContent = 'Classify';
   var classificationText;
@@ -374,7 +385,7 @@ runTest.addEventListener('click', (e) => {
     for(let j = 0; j < testingSet[i].length; j++) {
       sampleTest[j] = parseFloat(sampleTest[j]);
     }
-    if(algorithms[selectAlgorithm.value].classify(sampleTest, parseInt(testK.value)) === sampleClass) {
+    if(algorithms[selectAlgorithm.value].classify(sampleTest) === sampleClass) {
       correct++;
     }
   }

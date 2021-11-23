@@ -1,14 +1,14 @@
 // For the KNN, the training stage will be just format the given dataset
 function knnLearn() {this.model = numericalSet(table);}
 
-function knnClassify(sample, k) { // Receive a sample and return its classification based on the k nearest neighbours
+function knnClassify(sample, k, model) { // Receive a sample and return its classification based on the k nearest neighbours
   let distances = [];
   let distanceAux;
-  for(let i = 0; i < this.model.length; i++) { // For every sample in the dataset
+  for(let i = 0; i < model.length; i++) { // For every sample in the dataset
     distanceAux = 0;
-    for(let j = 0; j < this.model[0].length - 1; j++) {
+    for(let j = 0; j < model[0].length - 1; j++) {
       // Calculate the euclidian distance between the sample to be classified and the sample from the dataset
-      distanceAux += (sample[j] - this.model[i][j]) * (sample[j] - this.model[i][j]);
+      distanceAux += (sample[j] - model[i][j]) * (sample[j] - model[i][j]);
     }
     distances.push(Math.sqrt(distanceAux));
   }
@@ -33,9 +33,9 @@ function knnClassify(sample, k) { // Receive a sample and return its classificat
   let ocurrencies = []; // ocurrencies[i] will store the number of ocurrencies of the classification labels[i]
   let foundIndex; // Auxiliary variable
   for(let i = 0; i < k; i++) {
-    foundIndex = labels.indexOf(this.model[nearest[i][1]][this.model[0].length - 1]);
+    foundIndex = labels.indexOf(model[nearest[i][1]][model[0].length - 1]);
     if(foundIndex == -1) { // If the classification isn't already in the labels array
-      labels.push(this.model[nearest[i][1]][this.model[0].length - 1]); // Add it to labels[]
+      labels.push(model[nearest[i][1]][model[0].length - 1]); // Add it to labels[]
       ocurrencies.push(1); // Set its current ocurrence to 1
     } else { // If the classification is already in labels[]
       ocurrencies[foundIndex]++; // Increment its ocurrencies
@@ -53,4 +53,21 @@ function knnClassify(sample, k) { // Receive a sample and return its classificat
   }
 
   return labels[mostFreq[1]];
+}
+
+function knnCall(sample) { // Call KNN defining K as the current value in the interface's text input
+  return knnClassify(sample, parseInt(currentInterface.kInput.value), this.model);
+}
+
+function knnInterface() { // Create the interface elements specific to KNN
+  let container = document.createElement('div');
+  container.appendChild(document.createTextNode('K:'));
+  let kArea = document.createElement('textarea');
+  kArea.id = 'kInput';
+  container.appendChild(kArea);
+  let interface = {
+    kInput: kArea,
+    div: container
+  };
+  return interface;
 }
